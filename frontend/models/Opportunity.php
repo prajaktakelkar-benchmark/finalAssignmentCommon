@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace frontend\models;
 
 use Yii;
 
@@ -38,7 +38,7 @@ class Opportunity extends \yii\db\ActiveRecord
             [['person_id', 'lead_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['notes'], 'string', 'max' => 255],
-            [['lead_id'], 'exist', 'skipOnError' => true, 'targetClass' => Lead::className(), 'targetAttribute' => ['lead_id' => 'lead_id']],
+            [['lead_id'], 'exist', 'skipOnError' => true, 'targetClass' => Leads::className(), 'targetAttribute' => ['lead_id' => 'lead_id']],
             [['person_id'], 'exist', 'skipOnError' => true, 'targetClass' => Persons::className(), 'targetAttribute' => ['person_id' => 'person_id']],
         ];
     }

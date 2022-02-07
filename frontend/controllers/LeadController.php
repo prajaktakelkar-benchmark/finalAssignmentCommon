@@ -1,158 +1,97 @@
 <?php
+    namespace frontend\controllers;
+    use Yii;
+    use yii\rest\ActiveController;
+    use frontend\models\Leads;
+    use frontend\models\LeadSearch;
+    use frontend\models\Persons;
+    use frontend\models\Addresses;
+    use frontend\models\Opportunity;
+    use yii\filters\auth\HttpBasicAuth;
+    use frontend\controllers\BaseController;
 
-namespace frontend\controllers;
-
-use yii;
-use frontend\models\Leads;
-use frontend\models\Addresses;
-use frontend\models\Persons;
-use frontend\models\LeadSearch;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\rest\ActiveController;
-use yii\filters\auth\HttpBasicAuth;
-use frontend\controllers\BaseController;
-
-/**
- * LeadController implements the CRUD actions for Leads model.
- */
-class LeadController extends BaseController
-{
-    public $modelClass = 'frontend\models\LeadSearch';
-    // public function behaviors()
-    // {
-    //     return array_merge(
-    //         parent::behaviors(),
-    //         [
-    //             'verbs' => [
-    //                 'class' => VerbFilter::className(),
-    //                 'actions' => [
-    //                     'delete' => ['POST'],
-    //                 ],
-    //             ],
-    //         ]
-    //     );
-    // }
-
-    /**
-     * Lists all Leads models.
-     *
-     * @return string
-     */
-
-
-    public function actionConvert() {
-        try {
-            $opportunity = new Opportunity();
-            $opportunity->load(Yii::$app->getRequest()->getBodyParams(),'');
-            $opportunity->save();
-        }
-        catch (\yii\db\Exception $e) {
-            return "Duplicate entry not allowed";
-        }
-    }
-
-    public function actionIndex()
+    class LeadController extends BaseController
     {
-        $searchModel = new LeadSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        public $modelClass = 'frontend\models\LeadSearch';
 
-        return $dataProvider;
-    }
+        public function actionConvert($id) {
+            // echo "woorking.";
+            try {
+                
+                $lead = Leads::findOne($id);
+                $opportunity = new Opportunity();
+                $opportunity->lead_id = $lead ->lead_id;
+                $opportunity->person_id = $lead ->person_id;
+                $opportunity->load(Yii::$app->getRequest()->getBodyParams(),'');
+                $opportunity->save();
+                return $opportunity;
+            }
+            
+            catch (\yii\db\Exception $e) {
+                return "Duplicate entry not allowed";
+            }
 
-    /**
-     * Displays a single Leads model.
-     * @param int $lead_id Lead ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($lead_id)
-    {
-        $lead = LeadSearch::findOne($id);
+
+        }
+
+        public function actionIndex()
+        {
+            $searchModel = new LeadSearch();
+            $dataProvider = $searchModel->search($this->request->queryParams);
+  
+            return $dataProvider;
+        }
+
+        public function actionView($id)
+        {
+            $lead = LeadSearch::findOne($id);
             return $lead;
-    }
+        }
 
-    /**
-     * Creates a new Leads model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
-     */
-    public function actionCreate()
-    {
-        
-        $addresses = new Addresses();
-        $addresses->load(Yii::$app->getRequest()->getBodyParams(),'');
-        $addresses->save();
-        // echo "Working";
+        public function actionCreate()
+        {
+            $address = new Addresses();
+            $address->load(Yii::$app->getRequest()->getBodyParams(),'');
+            $address->save();
 
-        $persons = new Persons();
-        $persons->load(Yii::$app->getRequest()->getBodyParams(),'');
-        $persons->address_id = $addresses->address_id;
-        $persons->save();
-        // echo "Working";
+            $person = new Persons();
+            $person->load(Yii::$app->getRequest()->getBodyParams(),'');
+            $person->address_id = $address->address_id;
+            $person->save();
 
-        $leads = new Leads();
-        $leads->person_id = $persons->person_id;
-        $leads->save();
-        // echo "Working";
+            $leads = new Leads();
+            $leads->person_id = $person->person_id;
+            $leads->load(Yii::$app->getRequest()->getBodyParams(),'');
+            $leads->save();
 
-        return $leads;
-    }
+            return $leads;
+        }
 
-    /**
-     * Updates an existing Leads model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $lead_id Lead ID
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($lead_id)
-    {
-        $lead = Lead::findOne($id);
-            $persons = Persons::findOne($lead->person_id);
-            $addresses = Addresses::findOne($persons->address_id);
+        public function actionUpdate($id)
+        {
+            $lead = Leads::findOne($id);
+            $person = Persons::findOne($lead->person_id);
+            $address = Addresses::findOne($person->address_id);
 
-            if($persons->load(Yii::$app->getRequest()->getBodyParams(),'')) 
+            if($person->load(Yii::$app->getRequest()->getBodyParams(),'')) 
             {
-                if($addresses->load(Yii::$app->getRequest()->getBodyParams(),'')) 
+                if($address->load(Yii::$app->getRequest()->getBodyParams(),'')) 
                 {
-                    $persons->save();
-                    $addresses->save();
+                    $person->save();
+                    $address->save();
                     return "Edited sucessfully";
                 }
             }
             return "Edition failed.. try again";
-    }
+        }
 
-    /**
-     * Deletes an existing Leads model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $lead_id Lead ID
-     * @return \yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($lead_id)
-    {
-        $lead = Lead::findOne($id);
+        public function actionDelete($id)
+        {
+            $lead = Leads::findOne($id);
             $lead->is_deleted = 1;
             $lead->save();
             return "Deleted successfully";
-    }
-
-    /**
-     * Finds the Leads model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $lead_id Lead ID
-     * @return Leads the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    // protected function findModel($lead_id)
-    // {
-    //     if (($model = Leads::findOne(['lead_id' => $lead_id])) !== null) {
-    //         return $model;
-    //     }
-
-    //     throw new NotFoundHttpException('The requested page does not exist.');
-    // }
-}
+        }        
+        
+    }   
+?>

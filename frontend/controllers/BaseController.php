@@ -59,6 +59,7 @@ class BaseController extends ActiveController
             unset($actions['create']);   
             unset($actions['update']);
             unset($actions['delete']);
+            // return $actions;
         }
         
     }

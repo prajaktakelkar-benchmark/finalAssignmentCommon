@@ -3,9 +3,9 @@
 use yii\db\Migration;
 
 /**
- * Class m220204_175733_add_customer_table
+ * Class m220206_085828_add_customer_table
  */
-class m220204_175733_add_customer_table extends Migration
+class m220206_085828_add_customer_table extends Migration
 {
     /**
      * {@inheritdoc}
@@ -13,7 +13,7 @@ class m220204_175733_add_customer_table extends Migration
     public function up()
     {
 
-        $this->createTable('tbl_customer', [
+        $this->createTable('customer', [
             'customer_id' => $this->primaryKey(),
             'notes' => $this->string()->notNull(),
             'op_id' => $this->integer()->notNull(),
@@ -22,10 +22,10 @@ class m220204_175733_add_customer_table extends Migration
         ]);
 
         $this->addForeignKey(
-            'fk-tbl_customer-op_id',
-            'tbl_customer',
+            'fk-customer-op_id',
+            'customer',
             'op_id',
-            'tbl_opportunity',
+            'opportunity',
             'op_id',
             'CASCADE'
         );
@@ -35,11 +35,11 @@ class m220204_175733_add_customer_table extends Migration
     public function down()
     {
         $this->dropForeignKey(
-            'fk-tbl_customer-op_id',
-            'tbl_customer'
+            'fk-customer-op_id',
+            'customer'
         );
         
-        $this->dropTable('tbl_customer');
+        $this->dropTable('customer');
     }
 
     /*
@@ -51,7 +51,7 @@ class m220204_175733_add_customer_table extends Migration
 
     public function down()
     {
-        echo "m220204_175733_add_customer_table cannot be reverted.\n";
+        echo "m220206_085828_add_customer_table cannot be reverted.\n";
 
         return false;
     }

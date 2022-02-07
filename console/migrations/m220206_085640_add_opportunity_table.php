@@ -3,9 +3,9 @@
 use yii\db\Migration;
 
 /**
- * Class m220204_175311_add_opportunity_table
+ * Class m220206_085640_add_opportunity_table
  */
-class m220204_175311_add_opportunity_table extends Migration
+class m220206_085640_add_opportunity_table extends Migration
 {
     /**
      * {@inheritdoc}
@@ -13,7 +13,7 @@ class m220204_175311_add_opportunity_table extends Migration
     public function up()
     {
 
-        $this->createTable('tbl_opportunity', [
+        $this->createTable('opportunity', [
             'op_id' => $this->primaryKey(),
             'notes' => $this->string()->notNull(),
             'person_id' => $this->integer()->notNull(),
@@ -23,19 +23,19 @@ class m220204_175311_add_opportunity_table extends Migration
         ]);
 
         $this->addForeignKey(
-            'fk-tbl_opportunity-person_id',
-            'tbl_opportunity',
+            'fk-opportunity-person_id',
+            'opportunity',
             'person_id',
-            'tbl_person',
+            'person',
             'person_id',
             'CASCADE'
         );
 
         $this->addForeignKey(
-            'fk-tbl_opportunity-lead_id',
-            'tbl_opportunity',
+            'fk-opportunity-lead_id',
+            'opportunity',
             'lead_id',
-            'tbl_lead',
+            'lead',
             'lead_id',
             'CASCADE'
         );
@@ -43,15 +43,16 @@ class m220204_175311_add_opportunity_table extends Migration
     public function down()
     {
         $this->dropForeignKey(
-            'fk-tbl_opportunity-person_id',
-            'tbl_opportunity'
+            'fk-opportunity-person_id',
+            'opportunity'
         );
         $this->dropForeignKey(
-            'fk-tbl_opportunity-lead_id',
-            'tbl_opportunity'
+            'fk-opportunity-lead_id',
+            'opportunity'
         );
-        $this->dropTable('tbl_opportunity');
+        $this->dropTable('opportunity');
     }
+
 
 
     /*
@@ -63,7 +64,7 @@ class m220204_175311_add_opportunity_table extends Migration
 
     public function down()
     {
-        echo "m220204_175311_add_opportunity_table cannot be reverted.\n";
+        echo "m220206_085640_add_opportunity_table cannot be reverted.\n";
 
         return false;
     }

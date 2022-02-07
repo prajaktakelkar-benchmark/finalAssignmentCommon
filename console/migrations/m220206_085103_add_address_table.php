@@ -3,9 +3,9 @@
 use yii\db\Migration;
 
 /**
- * Class m220204_174058_add_address_table
+ * Class m220206_085103_add_address_table
  */
-class m220204_174058_add_address_table extends Migration
+class m220206_085103_add_address_table extends Migration
 {
     /**
      * {@inheritdoc}
@@ -13,7 +13,7 @@ class m220204_174058_add_address_table extends Migration
     public function up()
     {
 
-        $this->createTable('tbl_address', [
+        $this->createTable('address', [
             'address_id' => $this->primaryKey(),
             'add_line1' => $this->string()->notNull(),
             'add_line2' => $this->string()->notNull(),
@@ -25,8 +25,10 @@ class m220204_174058_add_address_table extends Migration
     }
     public function down()
     {
-        $this->dropTable('tbl_address');
+        $this->dropTable('address');
     }
+
+
 
     /*
     // Use up()/down() to run migration code without a transaction.
@@ -37,7 +39,7 @@ class m220204_174058_add_address_table extends Migration
 
     public function down()
     {
-        echo "m220204_174058_add_address_table cannot be reverted.\n";
+        echo "m220206_085103_add_address_table cannot be reverted.\n";
 
         return false;
     }

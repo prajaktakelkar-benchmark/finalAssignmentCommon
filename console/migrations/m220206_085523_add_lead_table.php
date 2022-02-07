@@ -3,9 +3,9 @@
 use yii\db\Migration;
 
 /**
- * Class m220204_174911_add_lead_table
+ * Class m220206_085523_add_lead_table
  */
-class m220204_174911_add_lead_table extends Migration
+class m220206_085523_add_lead_table extends Migration
 {
     /**
      * {@inheritdoc}
@@ -13,7 +13,7 @@ class m220204_174911_add_lead_table extends Migration
     public function up()
     {
 
-        $this->createTable('tbl_lead', [
+        $this->createTable('lead', [
             'lead_id' => $this->primaryKey(),
             'notes' => $this->string()->notNull(),
             'updated_at' => $this->datetime()->null()->defaultExpression('CURRENT_TIMESTAMP'),
@@ -23,10 +23,10 @@ class m220204_174911_add_lead_table extends Migration
         ]);
 
         $this->addForeignKey(
-            'fk-tbl_lead-person_id',
-            'tbl_lead',
+            'fk-lead-person_id',
+            'lead',
             'person_id',
-            'tbl_person',
+            'person',
             'person_id',
             'CASCADE'
         );
@@ -34,10 +34,10 @@ class m220204_174911_add_lead_table extends Migration
     public function down()
     {
         $this->dropForeignKey(
-            'fk-tbl_lead-person_id',
-            'tbl_lead'
+            'fk-lead-person_id',
+            'lead'
         );
-        $this->dropTable('tbl_lead');
+        $this->dropTable('lead');
     }
 
     /*
@@ -49,7 +49,7 @@ class m220204_174911_add_lead_table extends Migration
 
     public function down()
     {
-        echo "m220204_174911_add_lead_table cannot be reverted.\n";
+        echo "m220206_085523_add_lead_table cannot be reverted.\n";
 
         return false;
     }

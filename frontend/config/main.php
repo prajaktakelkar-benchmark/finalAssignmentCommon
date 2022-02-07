@@ -13,8 +13,10 @@ return [
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
         'request' => [
-            'csrfParam' => '_csrf-frontend',
-        ],
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ]
+            ],
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
@@ -36,14 +38,15 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
+        
         'urlManager' => [
             'enablePrettyUrl' => true,
-            'showScriptName' => false,
+            'enableStrictParsing' => true,
+            'showScriptName' => true,
             'rules' => [
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'lead'],
             ],
-        ],
-        */
+        ]
     ],
     'params' => $params,
 ];

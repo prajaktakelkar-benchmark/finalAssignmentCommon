@@ -3,9 +3,9 @@
 use yii\db\Migration;
 
 /**
- * Class m220204_174720_add_person_table
+ * Class m220206_085210_add_person_table
  */
-class m220204_174720_add_person_table extends Migration
+class m220206_085210_add_person_table extends Migration
 {
     /**
      * {@inheritdoc}
@@ -13,7 +13,7 @@ class m220204_174720_add_person_table extends Migration
     public function up()
     {
 
-        $this->createTable('tbl_person', [
+        $this->createTable('person', [
             'person_id' => $this->primaryKey(),
             'person_fname' => $this->string()->notNull(),
             'person_lname' => $this->string()->notNull(),
@@ -26,10 +26,10 @@ class m220204_174720_add_person_table extends Migration
         ]);
 
         $this->addForeignKey(
-            'fk-tbl_person-address_id',
-            'tbl_person',
+            'fk-person-address_id',
+            'person',
             'address_id',
-            'tbl_address',
+            'addresses',
             'address_id',
             'CASCADE'
         );
@@ -37,10 +37,10 @@ class m220204_174720_add_person_table extends Migration
     public function down()
     {
         $this->dropForeignKey(
-            'fk-tbl_person-address_id',
-            'tbl_person'
+            'fk-person-address_id',
+            'person'
         );
-        $this->dropTable('tbl_person');
+        $this->dropTable('person');
     }
 
     /*
@@ -52,7 +52,7 @@ class m220204_174720_add_person_table extends Migration
 
     public function down()
     {
-        echo "m220204_174720_add_person_table cannot be reverted.\n";
+        echo "m220206_085210_add_person_table cannot be reverted.\n";
 
         return false;
     }

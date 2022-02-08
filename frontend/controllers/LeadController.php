@@ -52,6 +52,7 @@
         {
             $address = new Addresses();
             $address->load(Yii::$app->getRequest()->getBodyParams(),'');
+            //if else condition for validation
             $address->save();
 
             $person = new Persons();

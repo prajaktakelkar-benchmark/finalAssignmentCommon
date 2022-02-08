@@ -30,15 +30,12 @@
             catch (\yii\db\Exception $e) {
                 return "Duplicate entry not allowed";
             }
-
-
         }
 
         public function actionIndex()
         {
             $searchModel = new LeadSearch();
             $dataProvider = $searchModel->search($this->request->queryParams);
-  
             return $dataProvider;
         }
 
@@ -48,42 +45,96 @@
             return $lead;
         }
 
-        public function actionCreate()
-        {
-            $address = new Addresses();
-            $address->load(Yii::$app->getRequest()->getBodyParams(),'');
-            //if else condition for validation
-            $address->save();
+        // public function actionCreate()
+        // {
+        //     $address = new Addresses();
+        //     $address->load(Yii::$app->getRequest()->getBodyParams(),'');
+        //     if($address->validate(()){
+        //         $address->attributes
+        //     }
+        //     //if else condition for validation
+        //     $address->save();
+        //     return $address;
 
-            $person = new Persons();
-            $person->load(Yii::$app->getRequest()->getBodyParams(),'');
-            $person->address_id = $address->address_id;
-            $person->save();
+        //     $person = new Persons();
+        //     $person->load(Yii::$app->getRequest()->getBodyParams(),'');
+        //     $person->address_id = $address->address_id;
+        //     $person->save();
+        //     return $person;
 
-            $leads = new Leads();
-            $leads->person_id = $person->person_id;
-            $leads->load(Yii::$app->getRequest()->getBodyParams(),'');
-            $leads->save();
+        //     $leads = new Leads();
+        //     $leads->person_id = $person->person_id;
+        //     $leads->load(Yii::$app->getRequest()->getBodyParams(),'');
+        //     $leads->save();
+        //     return $leads;
+        // }
 
-            return $leads;
+        public function actionCreate(){
+            $transactions = Yii::$app->db->beginTransaction();
+            try {
+                $address = new Addresses();
+                $person = new Persons();
+                $lead = new Leads();
+                
+                if ($address->load(Yii::$app->getRequest()->getBodyParams(),'') && $address->validate() ) {
+                    if ($address->save()) {
+                        $person->address_id = $address->address_id;
+                        if ($person->load(Yii::$app->getRequest()->getBodyParams(),'') && $person-> validate()) {
+                            if ($person->save()) {
+                                $lead->person_id = $person->person_id;
+                                if ($lead->load(Yii::$app->getRequest()->getBodyParams(),'') && $lead -> validate() ) {
+                                    if ($lead->save()) {
+                                        $transactions->commit();
+                                        return true;
+                                    }
+                                } else {
+                                    $transactions->rollBack();
+                                    return $lead;
+                                }
+                            }
+                        } else {
+                            $transactions -> rollBack();
+                            return $person;
+                        }
+                    }
+                } else {
+                    $transactions -> rollBack();
+                    return $address;
+                }
+                
+                
+            } catch (\Throwable $th) {
+                $transactions -> rollBack();
+                throw $th;
+            }
+
         }
 
+        
         public function actionUpdate($id)
         {
+            // echo "Calling";
+            // die;
+                   
             $lead = Leads::findOne($id);
             $person = Persons::findOne($lead->person_id);
             $address = Addresses::findOne($person->address_id);
-
-            if($person->load(Yii::$app->getRequest()->getBodyParams(),'')) 
+            // print_r($person);
+            // die;
+            if($lead->load(Yii::$app->getRequest()->getBodyParams(),''))
             {
-                if($address->load(Yii::$app->getRequest()->getBodyParams(),'')) 
+                if($person->load(Yii::$app->getRequest()->getBodyParams(),'')) 
                 {
-                    $person->save();
-                    $address->save();
-                    return "Edited sucessfully";
+                    if($address->load(Yii::$app->getRequest()->getBodyParams(),'')) 
+                    {
+                        $lead->save();
+                        $person->save();
+                        $address->save();
+                        return "Edited sucessfully";
+                    }
                 }
             }
-            return "Edition failed.. try again";
+            return "Editing failed.. try again";
         }
 
         public function actionDelete($id)

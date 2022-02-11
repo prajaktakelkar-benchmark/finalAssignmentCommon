@@ -21,7 +21,7 @@ class Addresses extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%addresses}}';
+        return 'addresses';
     }
 
     /**
@@ -55,6 +55,6 @@ class Addresses extends \yii\db\ActiveRecord
      */
     public function getPerson()
     {
-        return $this->hasMany(Persons::className(), ['address_id' => 'address_id']);
+        return $this->hasOne(Persons::className(), ['person_id' => 'person_id']);
     }
 }

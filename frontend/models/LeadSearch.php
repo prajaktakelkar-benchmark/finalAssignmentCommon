@@ -4,8 +4,9 @@ namespace frontend\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use frontend\models\Leads;
-use frontend\models\Persons;
+use common\models\Leads;
+use common\models\Persons;
+use common\models\Addresses;
 use yii\data\ActiveDataFilter;
 
 /**
@@ -23,9 +24,9 @@ class LeadSearch extends Leads
             'persons' => function ($model) {
                 return $model->persons;
             },
-            'addresses' => function ($model) {
-                return $model->persons->addresses;
-            }
+            // 'addresses' => function ($model) {
+            //     return $model->persons->addresses;
+            // }
         ];
     }
 

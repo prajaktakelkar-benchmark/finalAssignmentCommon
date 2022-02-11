@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use Yii;
+use frontend\models\Persons;
 
 /**
  * This is the model class for table "{{%opportunity}}".
@@ -25,7 +26,7 @@ class Opportunity extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%opportunity}}';
+        return 'opportunity';
     }
 
     /**
@@ -34,12 +35,12 @@ class Opportunity extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['notes', 'person_id', 'lead_id'], 'required'],
+            [['notes', 'person_id'], 'required'],
             [['person_id', 'lead_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['notes'], 'string', 'max' => 255],
-            [['lead_id'], 'exist', 'skipOnError' => true, 'targetClass' => Leads::className(), 'targetAttribute' => ['lead_id' => 'lead_id']],
-            [['person_id'], 'exist', 'skipOnError' => true, 'targetClass' => Persons::className(), 'targetAttribute' => ['person_id' => 'person_id']],
+            // [['lead_id'], 'exist', 'skipOnError' => true, 'targetClass' => Leads::className(), 'targetAttribute' => ['lead_id' => 'lead_id']],
+            // [['person_id'], 'exist', 'skipOnError' => true, 'targetClass' => Persons::className(), 'targetAttribute' => ['person_id' => 'person_id']],
         ];
     }
 
@@ -55,6 +56,7 @@ class Opportunity extends \yii\db\ActiveRecord
             'lead_id' => 'Lead ID',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'is_deleted' => 'Status'
         ];
     }
 

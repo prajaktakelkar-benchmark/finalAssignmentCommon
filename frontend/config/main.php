@@ -44,7 +44,7 @@ return [
             'enableStrictParsing' => false,
             'showScriptName' => true,
             'rules' => [
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'lead',
+                ['class' => 'yii\rest\UrlRule', 'controller' => ['lead','opportunity'],
                 'extraPatterns' => [
                     'OPTIONS,POST convert' => 'convert',
                 ]],

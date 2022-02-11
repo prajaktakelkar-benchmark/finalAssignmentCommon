@@ -23,7 +23,7 @@ class Leads extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%lead}}';
+        return 'lead';
     }
 
     /**

@@ -10,7 +10,7 @@
     use yii\filters\auth\HttpBasicAuth;
     use frontend\controllers\BaseController;
 
-    class LeadController extends BaseController
+    class LeadController extends ActiveController
     {
         public $modelClass = 'frontend\models\LeadSearch';
 

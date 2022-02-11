@@ -13,7 +13,7 @@ class m220206_085103_add_address_table extends Migration
     public function up()
     {
 
-        $this->createTable('address', [
+        $this->createTable('addresses', [
             'address_id' => $this->primaryKey(),
             'add_line1' => $this->string()->notNull(),
             'add_line2' => $this->string()->notNull(),
@@ -25,7 +25,7 @@ class m220206_085103_add_address_table extends Migration
     }
     public function down()
     {
-        $this->dropTable('address');
+        $this->dropTable('addresses');
     }
 
 

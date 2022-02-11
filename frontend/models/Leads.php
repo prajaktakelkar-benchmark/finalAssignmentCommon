@@ -32,7 +32,7 @@ class Leads extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['notes'], 'required'],
+            [['notes', 'person_id'], 'required'],
             // [['updated_at', 'created_at'], 'safe'],
             [['person_id'], 'integer'],
             [['notes'], 'string', 'max' => 255],
